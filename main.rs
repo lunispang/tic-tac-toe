@@ -91,6 +91,6 @@ fn main(){
 
         print_board(board);
 
-        cplayer = 1 - cplayer;
+        cplayer = !cplayer;
     }
 }
