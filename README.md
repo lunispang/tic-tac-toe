@@ -2,4 +2,5 @@
 
 free (shitty) source code!?!??
 
-Don't worry about the magic numbers ;)
+Don't worry about the magic numbers ;)  
+I'ts some janky bit manipulation stuff
