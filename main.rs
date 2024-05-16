@@ -1,4 +1,4 @@
-fn cc(c : u32, o : u32) -> char {
+fn board_char(board : u32, pos : u32) -> char {
     let x : usize = ((c >> (o * 2)) & 3) as usize;
     if x == 0 {
         return (o as u8 + 49 as u8) as char;
@@ -7,30 +7,31 @@ fn cc(c : u32, o : u32) -> char {
 }
 
 fn print_board(board : u32){
-    println!("{}|{}|{}", cc(board, 0), cc(board, 1), cc(board, 2));
+    println!("{}|{}|{}", board_char(board, 0), board_char(board, 1), board_char(board, 2));
     println!("-----");
-    println!("{}|{}|{}", cc(board, 3), cc(board, 4), cc(board, 5));
+    println!("{}|{}|{}", board_char(board, 3), board_char(board, 4), board_char(board, 5));
     println!("-----");
-    println!("{}|{}|{}", cc(board, 6), cc(board, 7), cc(board, 8));
+    println!("{}|{}|{}", board_char(board, 6), board_char(board, 7), board_char(board, 8));
 }
 
-fn set_m(board : u32, pos : u8, player : u8) -> u32 {
+fn set_board_pos(board : u32, pos : u8, player : u8) -> u32 {
     return board ^ (1 << (pos * 2 + player));
 }
 
-fn is_empty(board : u32, pos : u8) -> bool {
+fn is_board_empty(board : u32, pos : u8) -> bool {
     return (board >> (pos * 2) & 3) == 0;
 }
 
 fn board_empty(board : u32){
     let mut r : bool = true;
     for pos in 0..9 {
-        r &= !is_empty(board, pos);
+        r &= !is_board_empty(board, pos);
     }
     return r;
 }
 
-fn get_w(board : u32) -> u8 {
+// 0: no win, 1: X win, 2: O win
+fn get_board_win(board : u32) -> u8 {
     for i in 0..3 {
         if (board >> (i * 6)) & 21 == 21 {
             return 1;
@@ -70,7 +71,7 @@ fn main(){
 
     print_board(board);
 
-    while (get_w(board) == 0) && !board_empty(board) {
+    while (get_board_win(board) == 0){
         
         let mut input_line = String::new();
 
@@ -85,9 +86,9 @@ fn main(){
         input_num -= 1;
 
         if input_num > 9 { continue; }
-        if !is_empty(board, input_num) { continue; }
+        if !is_board_empty(board, input_num) { continue; }
 
-        board = set_m(board, input_num, cplayer);
+        board = set_board_pos(board, input_num, cplayer);
 
         print_board(board);
 
