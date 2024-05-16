@@ -1,7 +1,7 @@
-fn board_char(board : u32, pos : u32) -> char {
-    let x : usize = ((c >> (o * 2)) & 3) as usize;
+fn board_char(board : u32, pos : u8) -> char {
+    let x : usize = ((board >> (pos * 2)) & 3) as usize;
     if x == 0 {
-        return (o as u8 + 49 as u8) as char;
+        return (pos + 49 as u8) as char;
     }
     return " XO?".as_bytes()[x] as char;
 }
@@ -18,14 +18,14 @@ fn set_board_pos(board : u32, pos : u8, player : u8) -> u32 {
     return board ^ (1 << (pos * 2 + player));
 }
 
-fn is_board_empty(board : u32, pos : u8) -> bool {
+fn is_board_pos_empty(board : u32, pos : u8) -> bool {
     return (board >> (pos * 2) & 3) == 0;
 }
 
-fn board_empty(board : u32){
+fn is_board_full(board : u32) -> bool {
     let mut r : bool = true;
     for pos in 0..9 {
-        r &= !is_board_empty(board, pos);
+        r &= !is_board_pos_empty(board, pos);
     }
     return r;
 }
@@ -71,7 +71,7 @@ fn main(){
 
     print_board(board);
 
-    while (get_board_win(board) == 0){
+    while (get_board_win(board) == 0) &! is_board_full(board){
         
         let mut input_line = String::new();
 
@@ -86,7 +86,7 @@ fn main(){
         input_num -= 1;
 
         if input_num > 9 { continue; }
-        if !is_board_empty(board, input_num) { continue; }
+        if !is_board_pos_empty(board, input_num) { continue; }
 
         board = set_board_pos(board, input_num, cplayer);
 
@@ -95,4 +95,3 @@ fn main(){
         cplayer = !cplayer;
     }
 }
-//test
