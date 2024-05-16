@@ -30,7 +30,7 @@ fn is_board_full(board : u32) -> bool {
     return r;
 }
 
-// 0: no win, 1: X win, 2: O win
+// 0: no win, 1: X win, 2: O win, 3: tie
 fn get_board_win(board : u32) -> u8 {
     for i in 0..3 {
         if (board >> (i * 6)) & 21 == 21 {
@@ -49,17 +49,19 @@ fn get_board_win(board : u32) -> u8 {
             return 2;
         }
     }
-
+    //broken
     for i in 0..2 {
         if board & (65793 << i) == (65793 << i) {
             return i + 1;
         }
 
-        if board & (273 << i) == (273 << i) {
+        if board & (4368 << i) == (4368 << i) {
            return i + 1;
         }
     }
-
+    if is_board_full(board) {
+        return 3;
+    }
     return 0;
 }
 
@@ -85,25 +87,22 @@ fn main(){
             Err(_) => { println!("Invalid input."); continue; },
         };
 
-        input_num -= 1;
+        input_num = input_num - 1;
 
         if input_num > 9 { println!("Invalid number input."); continue; }
         if !is_board_pos_empty(board, input_num) { println!("That place is occupied."); continue; }
-        println!("{}, {}", input_num, cplayer);
+
         board = set_board_pos(board, input_num, cplayer);
 
         print_board(board);
 
         cplayer = 1 - cplayer;
     }
-    if is_board_full(board) {
-        println!("Tie!");
-    } else {
-        match get_board_win(board) {
-            0 => { println!("Something went wrong."); },
-            1 => { println!("X won!"); },
-            2 => { println!("O won!"); },
-            3.. => { println!("Something went VERY wrong."); },
-        }
+    match get_board_win(board) {
+        0 => { println!("Something went wrong."); },
+        1 => { println!("X won!"); },
+        2 => { println!("O won!"); },
+        3 => { println!("Tie!"); },
+        4.. => { println!("Something went VERY wrong."); },
     }
 }
