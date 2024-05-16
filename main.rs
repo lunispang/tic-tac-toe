@@ -78,17 +78,17 @@ fn main(){
         let mut input_line = String::new();
 
         std::io::stdin().read_line(&mut input_line)
-            .expect("Failed to read line");
+            .expect("Failed to read line.");
 
         let mut input_num : u8 = match input_line.trim().parse() {
             Ok(n) => n,
-            Err(_) => continue,
+            Err(_) => { println!("Invalid input."); continue; },
         };
 
         input_num -= 1;
 
-        if input_num > 9 { continue; }
-        if !is_board_pos_empty(board, input_num) { continue; }
+        if input_num > 9 { println!("Invalid number input."); continue; }
+        if !is_board_pos_empty(board, input_num) { println!("That place is occupied."); continue; }
         println!("{}, {}", input_num, cplayer);
         board = set_board_pos(board, input_num, cplayer);
 
