@@ -87,11 +87,21 @@ fn main(){
 
         if input_num > 9 { continue; }
         if !is_board_pos_empty(board, input_num) { continue; }
-
+        println!("{}, {}", input_num, cplayer);
         board = set_board_pos(board, input_num, cplayer);
 
         print_board(board);
 
-        cplayer = !cplayer;
+        cplayer = 1 - cplayer;
+    }
+    if is_board_full(board) {
+        println!("Tie!");
+    } else {
+        match get_board_win(board) {
+            0 => { println!("Something went wrong."); },
+            1 => { println!("X won!"); },
+            2 => { println!("O won!"); },
+            3.. => { println!("Something went VERY wrong."); },
+        }
     }
 }
