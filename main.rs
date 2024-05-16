@@ -73,6 +73,8 @@ fn main(){
 
     while (get_board_win(board) == 0) &! is_board_full(board){
         
+        println!("{}'s turn: ", "XO".as_bytes()[cplayer as usize] as char);
+
         let mut input_line = String::new();
 
         std::io::stdin().read_line(&mut input_line)
