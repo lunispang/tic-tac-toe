@@ -1,3 +1,4 @@
+//function to get X, O or the number to enter for the position
 fn board_char(board : u32, pos : u8) -> char {
     let x : usize = ((board >> (pos * 2)) & 3) as usize;
     if x == 0 {
@@ -32,6 +33,7 @@ fn is_board_full(board : u32) -> bool {
 
 // 0: no win, 1: X win, 2: O win, 3: tie
 fn get_board_win(board : u32) -> u8 {
+    //straight lines
     for i in 0..3 {
         if (board >> (i * 6)) & 21 == 21 {
             return 1;
@@ -45,11 +47,11 @@ fn get_board_win(board : u32) -> u8 {
             return 2;
         }
 
-        if board & (8322 << i * 2) == ( 8322 << i * 2) {
+        if board & (8322 << i * 2) == (8322 << i * 2) {
             return 2;
         }
     }
-    //broken
+    //diagonals
     for i in 0..2 {
         if board & (65793 << i) == (65793 << i) {
             return i + 1;
